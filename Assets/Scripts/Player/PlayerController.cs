@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 camForward, camRight, moveBuffer;
     public Vector3 mVelocity;
     public float mSpeed;
+    public float debugVelocity;
     private bool moving;
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        moving = false;
         moveBuffer = Vector3.zero;
         camForward = mPlayerCam.gameObject.transform.position - transform.position;
         camForward.y = 0.0f;
@@ -29,18 +31,22 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.W))
         {
             moveBuffer += -camForward.normalized;
+            moving = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
             moveBuffer += camForward.normalized;
+            moving = true;
         }
         if (Input.GetKey(KeyCode.A))
         {
             moveBuffer += -camRight;
+            moving = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
             moveBuffer += camRight;
+            moving = true;
         }
         if(moveBuffer.magnitude > 0.0f)
         {
@@ -62,11 +68,7 @@ public class PlayerController : MonoBehaviour
                 mSpeed = 0.0f;
             }
         }
-        //mRigidbody.velocity = moveBuffer.normalized * mSpeed * Time.deltaTime;
-        mVelocity = mRigidbody.velocity;
-        mVelocity.x = moveBuffer.normalized.x * mSpeed * Time.deltaTime;
-        mVelocity.z = moveBuffer.normalized.z * mSpeed * Time.deltaTime;
-        mRigidbody.velocity = mVelocity;
-        
+        mVelocity = moveBuffer.normalized * mMaxSpeed * Time.deltaTime;
+        mRigidbody.MovePosition(transform.position + mVelocity);
     }
 }

@@ -1,0 +1,49 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public enum ItemType
+{
+    Generic,
+    Weapon
+}
+
+public class Item : MonoBehaviour
+{
+    public string itemName;
+    public int ID;
+    public ItemType itemType;
+    public GameObject itemObject;
+
+    public bool mEnabled = true;
+    public MeshRenderer mMeshR;
+    //Getters
+
+    public virtual void Start()
+    {
+        mMeshR = GetComponent<MeshRenderer>();
+    }
+    public virtual void Update()
+    {
+
+    }
+
+    public string GetItemName() => itemName;
+    public int GetItemID() => ID;
+    public ItemType GetItemType() => itemType;
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (mEnabled)
+        {
+            Inventory inv;
+            if (other.GetComponent<Inventory>() != null)
+            {
+                inv = other.GetComponent<Inventory>();
+                inv.AddItem(inv.GetSmallestFreeSlot(), this);
+                mEnabled = false;
+                mMeshR.enabled = false;
+            }
+        }
+    }
+}

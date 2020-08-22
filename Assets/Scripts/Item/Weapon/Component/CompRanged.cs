@@ -23,11 +23,12 @@ public class CompRanged : MonoBehaviour
 {
     public Color mainCol, altCol;
     public int clip, maxAmmo, altclip, altmaxAmmo;
-    public float damage, altdamage, firerateRPM, range;
+    public float damage, altdamage, firerateRPM, range, speed;
     public bool gravity, altgravity;
     public RangedComponentType compType;
     public AmmoType ammoType, altAmmoType;
     public List<MeshRenderer> mMeshR;
+    public Transform fireAnchor;
     [SerializeField]
     private Transform anchor;
     // Start is called before the first frame update

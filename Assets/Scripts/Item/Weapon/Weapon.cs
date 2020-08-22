@@ -17,9 +17,6 @@ public class Weapon : Item
     public override void Update()
     {
         base.Update();
-        //Update shit
-        Attack();
-        AltAttack();
     }
 
     public virtual void Init()

@@ -17,6 +17,8 @@ public class Item : MonoBehaviour
 
     public bool mEnabled = true;
     public MeshRenderer mMeshR;
+
+    protected GameObject owner;
     //Getters
 
     public virtual void Start()
@@ -28,6 +30,7 @@ public class Item : MonoBehaviour
 
     }
 
+    public GameObject GetOwner() => owner;
     public string GetItemName() => itemName;
     public int GetItemID() => ID;
     public ItemType GetItemType() => itemType;
@@ -43,6 +46,7 @@ public class Item : MonoBehaviour
                 inv.AddItem(inv.GetSmallestFreeSlot(), this);
                 mEnabled = false;
                 mMeshR.enabled = false;
+                owner = other.gameObject;
             }
         }
     }

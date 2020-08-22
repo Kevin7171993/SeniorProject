@@ -9,18 +9,26 @@ public class Inventory : MonoBehaviour
     private List<Item> mInventory;
     public Weapon mEquippedWeapon;
     public int mInvSize;
+    public GameObject RangedAnchorPoint;
+    public GameObject MeleeAnchorPoint;
     private List<int> mFreeslots = new List<int>();
-
+    private GameObject owner;
     private Item empty = new Item();
     // Start is called before the first frame update
     void Start()
     {
+        owner = gameObject;
         Flush();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(mEquippedWeapon != null)
+        {
+            mEquippedWeapon.mEquipped = true;
+            mEquippedWeapon.mMeshR.enabled = true;
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             DebugEquipWeapon();
@@ -106,6 +114,11 @@ public class Inventory : MonoBehaviour
         Destroy(mInventory[_slot].gameObject);
         mInventory[_slot] = empty;
         ReturnFreeSlot(_slot);
+    }
+
+    public GameObject GetOwner()
+    {
+        return gameObject;
     }
 //#if DEBUG
     public void DebugEquipWeapon()

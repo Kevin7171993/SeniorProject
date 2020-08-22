@@ -4,71 +4,65 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Cinemachine.CinemachineFreeLook mPlayerCam;
-    public Rigidbody mRigidbody;
-    public float mMaxSpeed, mDecceleration, mAcceleration;
-    
-    private Vector3 camForward, camRight, moveBuffer;
-    public Vector3 mVelocity;
+    public CharacterController controller;
+    public Rigidbody rb;
+    public Transform cam;
+    public Animator anim;
+
     public float mSpeed;
-    public float debugVelocity;
-    private bool moving;
+    public float FallMoveSpeed = 2.0f; //How much the player can move the character when falling
+    public float turnSmoothTime = 0.0f;
+    float turnSmoothVelocity;
+    public bool moving;
+
+    [SerializeField]
+    float vertical, horizontal;
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        moving = false;
-        moveBuffer = Vector3.zero;
-        camForward = mPlayerCam.gameObject.transform.position - transform.position;
-        camForward.y = 0.0f;
-        camRight = Vector3.Cross(camForward.normalized, transform.up);
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetKey(KeyCode.W))
+        anim.SetInteger("Forward", (int)vertical);
+        anim.SetInteger("Right", (int)horizontal);
+
+        //Character Movement Direction
+        Vector3 direction = new Vector3(horizontal, 0.0f, vertical).normalized;
+
+        //Character Look Direction
+        if(vertical < 0.0f)
         {
-            moveBuffer += -camForward.normalized;
-            moving = true;
+            vertical = 1.0f;
         }
-        if (Input.GetKey(KeyCode.S))
+        Vector3 lookdir = new Vector3(0.0f, 0.0f, vertical).normalized;
+        float lookAngle = Mathf.Atan2(lookdir.x, lookdir.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, lookAngle, ref turnSmoothVelocity, turnSmoothTime);
+        transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
+
+        moving = false;
+        if (direction.magnitude >= 0.1f)
         {
-            moveBuffer += camForward.normalized;
-            moving = true;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveBuffer += -camRight;
-            moving = true;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveBuffer += camRight;
-            moving = true;
-        }
-        if(moveBuffer.magnitude > 0.0f)
-        {
-            moving = true;
-            if (mSpeed < mMaxSpeed)
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            if (controller.isGrounded)
             {
-                mSpeed += mAcceleration * Time.deltaTime;
-            }
-        }
-        else
-        {
-            moving = false;
-            if(mSpeed > 0.0f)
-            {
-                mSpeed -= mDecceleration;
+                controller.Move(moveDir.normalized * mSpeed * Time.deltaTime);
             }
             else
             {
-                mSpeed = 0.0f;
+                controller.Move(moveDir.normalized * (mSpeed / FallMoveSpeed) * Time.deltaTime);
             }
+
+            moving = true;
         }
-        mVelocity = moveBuffer.normalized * mMaxSpeed * Time.deltaTime;
-        mRigidbody.MovePosition(transform.position + mVelocity);
+
+        //Let unity apply gravity
+        controller.SimpleMove(Vector3.zero);
     }
 }

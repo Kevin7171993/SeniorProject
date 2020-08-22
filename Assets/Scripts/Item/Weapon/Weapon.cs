@@ -9,6 +9,10 @@ public enum WeaponType
 public class Weapon : Item
 {
     protected WeaponType weaponType;
+    [SerializeField]
+    public bool mEquipped = false;
+    public bool mVisible = true;
+    protected bool mInitPos = false;
     // Update is called once per frame
     public override void Update()
     {
@@ -20,7 +24,7 @@ public class Weapon : Item
 
     public virtual void Init()
     {
-
+        
     }
 
     public virtual void Attack()
@@ -35,7 +39,11 @@ public class Weapon : Item
 
     protected override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
         //Unique Weapon Code below
+        if (!mEquipped)
+        {
+            base.OnTriggerEnter(other);
+            mVisible = false;
+        }
     }
 }

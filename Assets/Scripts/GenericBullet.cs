@@ -13,19 +13,30 @@ public class GenericBullet : MonoBehaviour
     public List<GameObject> owners;
     public bool mActive = false;
     public Vector3 origin;
+    private Collider mCollider;
+    [SerializeField]
+    private Light mLight;
+    [SerializeField]
+    private Material mMat;
     // Start is called before the first frame update
     public virtual void Start()
     {
         mMeshR = GetComponent<MeshRenderer>();
         mRb = GetComponent<Rigidbody>();
+        mCollider = GetComponent<Collider>();
     }
 
     // Update is called once per frame
     public virtual void Update()
     {
         mMeshR.enabled = mActive;
-        if (!mActive) { return; }
+        mCollider.enabled = mActive;
+        mLight.enabled = mActive;
+        if (!mActive) { mLight.enabled = false; return; }
         transform.position += (transform.forward * speed) * Time.deltaTime;
+        mLight.color = mainCol;
+        mMat.color = mainCol;
+        mMat.SetColor("_EmissionColor", mainCol);
         if(Vector3.Distance(origin, transform.position) >= range)
         {
             mActive = false;
@@ -41,6 +52,10 @@ public class GenericBullet : MonoBehaviour
             if(owners[i] == other.gameObject)
             {
                 hitowner = true;
+            }
+            if(other.gameObject.GetComponent<GenericBullet>() != null)
+            {
+                hitowner = false;
             }
         }
         if(!hitowner)

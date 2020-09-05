@@ -13,6 +13,7 @@ public class Weapon : Item
     public bool mEquipped = false;
     public bool mVisible = true;
     protected bool mInitPos = false;
+    public bool stopFire = false;
     // Update is called once per frame
     public override void Update()
     {

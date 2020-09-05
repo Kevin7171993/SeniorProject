@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6786052962658031049}
   - component: {fileID: 2050415854879025875}
   - component: {fileID: 488894855669623818}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BasicGrenadeLauncherModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6937250496550262571}
   - component: {fileID: 7971735605617723810}
-  m_Layer: 0
+  - component: {fileID: 745336443}
+  m_Layer: 2
   m_Name: BasicGrenadeLauncher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,6 +136,7 @@ MonoBehaviour:
   altdamage: 200
   firerateRPM: 60
   range: 0
+  speed: 0
   gravity: 0
   altgravity: 1
   compType: 5
@@ -142,4 +144,25 @@ MonoBehaviour:
   altAmmoType: 2
   mMeshR:
   - {fileID: 488894855669623818}
+  fireAnchor: {fileID: 0}
+  attached: 0
   anchor: {fileID: 6937250496550262571}
+--- !u!114 &745336443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714400724978388239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb745aecb7d9ab4b8957b7deb4749dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 
+  ID: 0
+  itemType: 5
+  itemObject: {fileID: 5714400724978388239}
+  itemIcon: {fileID: 21300000, guid: 87122e8655386db45ac4eda963fd30f5, type: 3}
+  mEnabled: 1
+  mMeshR: {fileID: 0}

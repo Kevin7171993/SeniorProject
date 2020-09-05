@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4102594083166508228}
   - component: {fileID: 8853872360276748519}
   - component: {fileID: 4242473944262532223}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BasicMagazineModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 841781f7f84cec0489027981e44fdda7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,7 +91,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4934147535159570905}
   - component: {fileID: 929948773731774805}
-  m_Layer: 0
+  - component: {fileID: 763783020}
+  m_Layer: 2
   m_Name: BasicMagazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,6 +136,7 @@ MonoBehaviour:
   altdamage: 0
   firerateRPM: 0
   range: 0
+  speed: 0
   gravity: 0
   altgravity: 0
   compType: 3
@@ -142,4 +144,25 @@ MonoBehaviour:
   altAmmoType: 0
   mMeshR:
   - {fileID: 4242473944262532223}
+  fireAnchor: {fileID: 0}
+  attached: 0
   anchor: {fileID: 4934147535159570905}
+--- !u!114 &763783020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2975606124130379444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb745aecb7d9ab4b8957b7deb4749dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 
+  ID: 0
+  itemType: 3
+  itemObject: {fileID: 2975606124130379444}
+  itemIcon: {fileID: 21300000, guid: 87122e8655386db45ac4eda963fd30f5, type: 3}
+  mEnabled: 1
+  mMeshR: {fileID: 0}

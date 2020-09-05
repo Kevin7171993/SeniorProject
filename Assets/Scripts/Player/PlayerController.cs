@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
+    public Cinemachine.CinemachineFreeLook mCinemachine;
     public Rigidbody rb;
     public Transform cam;
     public Animator anim;
@@ -15,11 +16,14 @@ public class PlayerController : MonoBehaviour
     float turnSmoothVelocity;
     public bool moving;
 
+    private float camSpeedX, camSpeedY;
     [SerializeField]
     float vertical, horizontal;
     // Start is called before the first frame update
     void Start()
     {
+        camSpeedX = mCinemachine.m_XAxis.m_MaxSpeed;
+        camSpeedY = mCinemachine.m_YAxis.m_MaxSpeed;
     }
 
     // Update is called once per frame
@@ -64,5 +68,22 @@ public class PlayerController : MonoBehaviour
 
         //Let unity apply gravity
         controller.SimpleMove(Vector3.zero);
+
+        //UI
+        UIState();
+    }
+
+    public void UIState()
+    {
+        if(GetComponent<Inventory>().InvGuiActive)
+        {
+            mCinemachine.m_XAxis.m_MaxSpeed = 0.0f;
+            mCinemachine.m_YAxis.m_MaxSpeed = 0.0f;
+        }
+        else
+        {
+            mCinemachine.m_XAxis.m_MaxSpeed = camSpeedX;
+            mCinemachine.m_YAxis.m_MaxSpeed = camSpeedY;
+        }
     }
 }

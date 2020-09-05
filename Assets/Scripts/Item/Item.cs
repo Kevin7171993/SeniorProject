@@ -4,8 +4,13 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Generic,
-    Weapon
+    Weapon,
+    Barrel,
+    Receiver,
+    Magazine,
+    StatusMod,
+    Addon,
+    Generic
 }
 
 public class Item : MonoBehaviour
@@ -14,6 +19,7 @@ public class Item : MonoBehaviour
     public int ID;
     public ItemType itemType;
     public GameObject itemObject;
+    public Sprite itemIcon;
 
     public bool mEnabled = true;
     public MeshRenderer mMeshR;

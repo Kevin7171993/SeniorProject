@@ -29,6 +29,7 @@ public class CompRanged : MonoBehaviour
     public AmmoType ammoType, altAmmoType;
     public List<MeshRenderer> mMeshR;
     public Transform fireAnchor;
+    public bool attached = false;
     [SerializeField]
     private Transform anchor;
     // Start is called before the first frame update

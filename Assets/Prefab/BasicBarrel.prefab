@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7303140466655581069}
   - component: {fileID: 2480426761968543999}
-  m_Layer: 0
+  - component: {fileID: 392705506}
+  m_Layer: 2
   m_Name: BasicBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,6 +56,7 @@ MonoBehaviour:
   altdamage: 0
   firerateRPM: 0
   range: 300
+  speed: 20
   gravity: 0
   altgravity: 0
   compType: 1
@@ -63,7 +65,27 @@ MonoBehaviour:
   mMeshR:
   - {fileID: 2617032113826074408}
   fireAnchor: {fileID: 849364602986624674}
+  attached: 0
   anchor: {fileID: 7303140466655581069}
+--- !u!114 &392705506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242457523036464148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb745aecb7d9ab4b8957b7deb4749dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 
+  ID: 0
+  itemType: 1
+  itemObject: {fileID: 242457523036464148}
+  itemIcon: {fileID: 21300000, guid: 87122e8655386db45ac4eda963fd30f5, type: 3}
+  mEnabled: 1
+  mMeshR: {fileID: 0}
 --- !u!1 &7202057246873703814
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +97,7 @@ GameObject:
   - component: {fileID: 4692806867497538665}
   - component: {fileID: 8499674651224887634}
   - component: {fileID: 2617032113826074408}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BasicBarrelModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +176,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 849364602986624674}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

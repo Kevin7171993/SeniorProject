@@ -46,6 +46,13 @@ public class BaseRanged : Weapon
         itemType = ItemType.Weapon;
         weaponType = WeaponType.Ranged;
         itemObject = gameObject;
+
+        //Mark attached components as attached so player cannot pick up the components seperately
+        if(mWeaponComponents.Count == 0) { return; }
+        for (int i = 1; i < mWeaponComponents.Count; i++) //Don't scan base weapon by skipping i to 1
+        {
+            mWeaponComponents[i].GetComponent<CompRanged>().attached = true;
+        }
     }
 
     // Update is called once per frame
@@ -76,6 +83,7 @@ public class BaseRanged : Weapon
             mMeshR.enabled = false;
             for (int i = 1; i < mWeaponComponents.Count; ++i)
             {
+                if(mWeaponComponents[i] == null) { continue; }
                 if (mWeaponComponents[i].GetComponent<CompRanged>() != null)
                 {
                     mWeaponComponents[i].GetComponent<CompRanged>().SetVisible(false);
@@ -89,6 +97,7 @@ public class BaseRanged : Weapon
                 mMeshR.enabled = true;
                 for (int i = 1; i < mWeaponComponents.Count; ++i)
                 {
+                    if(mWeaponComponents[i] == null) { continue; }
                     if (mWeaponComponents[i].GetComponent<CompRanged>() != null)
                     {
                         mWeaponComponents[i].GetComponent<CompRanged>().SetVisible(true);
@@ -97,6 +106,7 @@ public class BaseRanged : Weapon
             }
         }
 
+        /*
         //Resolve fire rate cooldown
         if(cooldown < firerate)
             cooldown += Time.deltaTime;
@@ -104,11 +114,11 @@ public class BaseRanged : Weapon
             altcooldown += Time.deltaTime;
 
         //Listen For Player Input
-        if(Input.GetMouseButton(0)) //left click is held
+        if(Input.GetMouseButton(0) && mEquipped) //left click is held
         {
             Attack();
         }
-        if(Input.GetMouseButton(1)) //Right click is held
+        if(Input.GetMouseButton(1) && mEquipped && mWeaponComponents[(int)RangedComponentType.Addon] != null) //Right click is held
         {
             AltAttack();
         }
@@ -116,12 +126,33 @@ public class BaseRanged : Weapon
         {
             nextBullet = 0;
         }
+        */
+    }
+    public void FixedUpdate()
+    {
+        //Resolve fire rate cooldown
+        if (cooldown < firerate)
+            cooldown += Time.deltaTime;
+        if (altcooldown < altfirerate)
+            altcooldown += Time.deltaTime;
 
-
+        //Listen For Player Input
+        if (Input.GetMouseButton(0) && mEquipped) //left click is held
+        {
+            Attack();
+        }
+        if (Input.GetMouseButton(1) && mEquipped && mWeaponComponents[(int)RangedComponentType.Addon] != null) //Right click is held
+        {
+            AltAttack();
+        }
+        if (nextBullet >= 300)
+        {
+            nextBullet = 0;
+        }
     }
     public override void Attack()
     {
-        if(cooldown >= firerate)
+        if(cooldown >= firerate && !stopFire)
         {
             SetStats(bulletpool[nextBullet]); //Set the stats of the bullet to prepare for firing
             //Set bullet spawn location
@@ -174,6 +205,7 @@ public class BaseRanged : Weapon
         mWeaponComponents[1].transform.rotation = owner.GetComponent<Inventory>().RangedAnchorPoint.transform.rotation;
         for (int i = 1; i < mAnchorPoints.Count; ++i)
         {
+            if(mWeaponComponents[i] == null) { continue; }
             mWeaponComponents[i].transform.position = mAnchorPoints[i].transform.position;
             mWeaponComponents[i].transform.rotation = mAnchorPoints[i].transform.rotation;
 
@@ -189,6 +221,7 @@ public class BaseRanged : Weapon
         FlushStats();
         for (int i = 1; i < mWeaponComponents.Count; ++i)
         {
+            if(mWeaponComponents[i] == null) { continue; }
             AddStats(mWeaponComponents[i].GetComponent<CompRanged>(), i);
         }
         firerate = (1.0f / (firerateRPM / 60.0f));
@@ -223,7 +256,7 @@ public class BaseRanged : Weapon
         altclip += component.altclip;
         altmaxAmmo += component.altmaxAmmo;
         damage += component.damage;
-        altdamage += component.damage;
+        altdamage += component.altdamage;
         firerateRPM += component.firerateRPM;
         range += component.range;
         speed += component.speed;
@@ -254,6 +287,7 @@ public class BaseRanged : Weapon
 
         firerate = 0;
         altfirerate = 0;
+        altAmmoType = AmmoType.none;
     }
 
     void SetStats(GenericBullet bullet, bool alt = false)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftMenu : MonoBehaviour
+public class CraftMenu : GenericUI
 {
     public bool isActive = false;
     [SerializeField]
@@ -11,11 +11,11 @@ public class CraftMenu : MonoBehaviour
     private List<TypedSlot> mComponentsSlots;
     private RectTransform mTransform;
     private Vector3 origin;
-    private Vector3 hideUI = new Vector3(9999, 9999, 9999);
+    //private Vector3 hideUI = new Vector3(9999, 9999, 9999);
     [SerializeField]
     private Inventory mInventory;
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
         mTransform = GetComponent<RectTransform>();
         origin = mTransform.position;
@@ -23,7 +23,7 @@ public class CraftMenu : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
         if(!mInventory.InvGuiActive && isActive)
         {
@@ -37,7 +37,7 @@ public class CraftMenu : MonoBehaviour
         isActive = true;
         mTransform.position = origin;
     }
-    public void CloseMenu()
+    public override void CloseMenu()
     {
         Apply();
         mTransform.position = hideUI;

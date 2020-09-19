@@ -24,6 +24,7 @@ public class CraftApplyButton : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            CameraManager.ActivateCamera(Cams.MainCam);
             mMenu.CloseMenu();
         }
     }

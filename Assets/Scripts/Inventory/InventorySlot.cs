@@ -20,7 +20,8 @@ public class InventorySlot : MonoBehaviour
     private Vector3 rPos;
     [SerializeField]
     protected bool iconFollow = false;
-    private RectTransform mTrans;
+    protected RectTransform mTrans;
+    private BaseRanged currentCraftWeapon = null;
     // Start is called before the first frame update
     virtual public void Start()
     {
@@ -92,11 +93,29 @@ public class InventorySlot : MonoBehaviour
         Debug.Log("[InventorySlot] Swapping Item");
         Item temp1, temp2;
         temp1 = mItem;
+        if (temp1 != null)
+        {
+            if (temp1.GetComponent<CompRanged>() != null)
+            {
+                temp1.GetComponent<CompRanged>().SetVisible(false);
+                temp1.transform.parent = null;
+                GameObject.FindGameObjectWithTag("CraftMenu").GetComponent<CraftMenu>().Refresh();
+            }
+        }
         if (other.mItem != null) //Make sure the other slot have an item to swap
         {
             temp2 = other.mItem;
             mItem = temp2;
             mIcon.sprite = temp2.itemIcon;
+            if (temp2 != null)
+            {
+                if (temp2.GetComponent<CompRanged>() != null)
+                {
+                    temp2.GetComponent<CompRanged>().SetVisible(false);
+                    temp2.transform.parent = null;
+                    GameObject.FindGameObjectWithTag("CraftMenu").GetComponent<CraftMenu>().Refresh();
+                }
+            }
         }
         else //If the other slot does not have an item, null this slot and skip to moving this slot's item to the other slot
         {
@@ -164,10 +183,17 @@ public class InventorySlot : MonoBehaviour
                 {
                     Debug.Log("[InventorySlot] Weapon Right Click Detected, Opening Craft Menu");
                     c_menu.OpenMenu(mItem.GetComponent<BaseRanged>());
+                    currentCraftWeapon = mItem.GetComponent<BaseRanged>();
+                    currentCraftWeapon.crafting = true;
+                    currentCraftWeapon.SetVisible(true);
+                    GameObject.Find("CameraManager").GetComponent<CameraManager>().SwitchCamera(Cams.CraftCam);
                 }
                 else if (mItem.itemType == ItemType.Weapon && c_menu.isActive == true)
                 {
                     Debug.Log("[InventorySlot] Weapon Right Click Detected, Closing Craft Menu");
+                    GameObject.Find("CameraManager").GetComponent<CameraManager>().SwitchCamera(Cams.MainCam);
+                    currentCraftWeapon.crafting = false;
+                    currentCraftWeapon.SetVisible(false);
                     c_menu.CloseMenu();
                 }
             }

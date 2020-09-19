@@ -7,6 +7,7 @@ public class CraftMenu : GenericUI
     public bool isActive = false;
     [SerializeField]
     private BaseRanged mTargetWeapon;
+    private BaseRanged mPrevWeapon;
     [SerializeField]
     private List<TypedSlot> mComponentsSlots;
     private RectTransform mTransform;
@@ -40,6 +41,10 @@ public class CraftMenu : GenericUI
     public override void CloseMenu()
     {
         Apply();
+        if (mPrevWeapon != null)
+        {
+            mPrevWeapon.crafting = false;
+        }
         mTransform.position = hideUI;
     }
     public void Flush()
@@ -56,6 +61,7 @@ public class CraftMenu : GenericUI
     }
     public void FlushWeapon()
     {
+        mPrevWeapon = mTargetWeapon;
         mTargetWeapon = null;
     }
 
@@ -91,5 +97,11 @@ public class CraftMenu : GenericUI
         //Flush the Crafting Menu
         Flush();
         isActive = false;
+    }
+
+    public void Refresh()
+    {
+        Apply();
+        ParseWeapon(mPrevWeapon);
     }
 }

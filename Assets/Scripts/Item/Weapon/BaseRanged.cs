@@ -18,6 +18,7 @@ public class BaseRanged : Weapon
     public List<GameObject> mWeaponComponents;
     public List<GameObject> mAnchorPoints;
     public bool infiniteAmmo;
+    public bool crafting;
 
     [SerializeField]
     private List<Color> mainCols, altCols;
@@ -76,9 +77,8 @@ public class BaseRanged : Weapon
                 statsCalculated = true;
             }
         }
-
         //Visible?
-        if(!mVisible && mWeaponComponents.Count >= 2)
+        if(!mVisible && mWeaponComponents.Count >= 2 && !crafting)
         {
             mMeshR.enabled = false;
             for (int i = 1; i < mWeaponComponents.Count; ++i)
@@ -105,31 +105,13 @@ public class BaseRanged : Weapon
                 }
             }
         }
-
-        /*
-        //Resolve fire rate cooldown
-        if(cooldown < firerate)
-            cooldown += Time.deltaTime;
-        if (altcooldown < altfirerate)
-            altcooldown += Time.deltaTime;
-
-        //Listen For Player Input
-        if(Input.GetMouseButton(0) && mEquipped) //left click is held
-        {
-            Attack();
-        }
-        if(Input.GetMouseButton(1) && mEquipped && mWeaponComponents[(int)RangedComponentType.Addon] != null) //Right click is held
-        {
-            AltAttack();
-        }
-        if(nextBullet >= 300)
-        {
-            nextBullet = 0;
-        }
-        */
     }
     public void FixedUpdate()
     {
+        if (crafting)
+        {
+            SetComponentsPosition();
+        }
         //Resolve fire rate cooldown
         if (cooldown < firerate)
             cooldown += Time.deltaTime;
@@ -201,17 +183,39 @@ public class BaseRanged : Weapon
     }
     public void SetComponentsPosition()
     {
-        mWeaponComponents[1].transform.position = owner.GetComponent<Inventory>().RangedAnchorPoint.transform.position;
-        mWeaponComponents[1].transform.rotation = owner.GetComponent<Inventory>().RangedAnchorPoint.transform.rotation;
+        if (mWeaponComponents[0] != null)
+        {
+            if (mWeaponComponents[0].transform.parent == null)
+            {
+                mWeaponComponents[0].transform.position = owner.GetComponent<Inventory>().RangedAnchorPoint.transform.position;
+                mWeaponComponents[0].transform.rotation = owner.GetComponent<Inventory>().RangedAnchorPoint.transform.rotation;
+                mWeaponComponents[0].transform.parent = owner.GetComponent<Inventory>().RangedAnchorPoint.transform;
+            }
+        }
         for (int i = 1; i < mAnchorPoints.Count; ++i)
         {
             if(mWeaponComponents[i] == null) { continue; }
-            mWeaponComponents[i].transform.position = mAnchorPoints[i].transform.position;
-            mWeaponComponents[i].transform.rotation = mAnchorPoints[i].transform.rotation;
-
+            if (mWeaponComponents[i].transform.parent == null)
+            {
+                mWeaponComponents[i].transform.position = mAnchorPoints[i].transform.position;
+                mWeaponComponents[i].transform.rotation = mAnchorPoints[i].transform.rotation;
+                mWeaponComponents[i].transform.parent = transform;
+            }
             if(i == (int)RangedComponentType.Barrel)
             {
                 firePoint = mWeaponComponents[i].GetComponent<CompRanged>().fireAnchor;
+            }
+        }
+    }
+
+    public void SetVisible(bool visible)
+    {
+        for (int i = 1; i < mWeaponComponents.Count; ++i)
+        {
+            if (mWeaponComponents[i] == null) { continue; }
+            if (mWeaponComponents[i].GetComponent<CompRanged>() != null)
+            {
+                mWeaponComponents[i].GetComponent<CompRanged>().SetVisible(visible);
             }
         }
     }
@@ -316,6 +320,7 @@ public class BaseRanged : Weapon
     {
         Gizmos.color = Color.red;
         Camera cam = Camera.main;
+        if(cam == null) { return; }
         Ray ray = new Ray(cam.transform.position + (cam.transform.forward * 10.0f), cam.transform.forward);
         RaycastHit hit;
         Physics.Raycast(ray, out hit, range);

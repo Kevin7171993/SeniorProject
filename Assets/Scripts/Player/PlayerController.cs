@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public Transform cam;
     public Animator anim;
+    public Transform playerSpine;
+    private AimCam aim;
+    public Vector3 aimoffset;
 
     public float mSpeed;
     public float FallMoveSpeed = 2.0f; //How much the player can move the character when falling
@@ -24,6 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         camSpeedX = mCinemachine.m_XAxis.m_MaxSpeed;
         camSpeedY = mCinemachine.m_YAxis.m_MaxSpeed;
+        aim = Camera.main.GetComponent<AimCam>();
     }
 
     // Update is called once per frame
@@ -47,7 +51,6 @@ public class PlayerController : MonoBehaviour
         float lookAngle = Mathf.Atan2(lookdir.x, lookdir.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, lookAngle, ref turnSmoothVelocity, turnSmoothTime);
         transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
-
         moving = false;
         if (direction.magnitude >= 0.1f)
         {
@@ -73,6 +76,12 @@ public class PlayerController : MonoBehaviour
         UIState();
     }
 
+    private void LateUpdate()
+    {
+
+        playerSpine.LookAt(aim.dest);
+        //playerSpine.transform.localRotation.SetLookRotation(aim.dest);
+    }
     public void UIState()
     {
         if(GetComponent<Inventory>().InvGuiActive)

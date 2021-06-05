@@ -173,13 +173,16 @@ public class Inventory : MonoBehaviour
             InvGuiActive = true;
             //Turn on Gui
             mTransform.position = originPos;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
         else
         {
             InvGuiActive = false;
             //Turn off Gui
             mTransform.position = hideUI;
-
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 

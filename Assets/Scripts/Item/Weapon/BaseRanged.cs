@@ -13,6 +13,7 @@ public enum RangedAnchorPoints //
 }
 public class BaseRanged : Weapon
 {
+    [SerializeField]
     private GenericBullet[] bulletpool; //bullet pool
 
     public List<GameObject> mWeaponComponents;
